@@ -13,6 +13,8 @@ dependencies:
   google_sign_in:
   firebase_auth:
   cloud_firestore: 0.3.0
+  image_carousel:
+
   flutter_speed_dialer:
     path: ../flutter_speed_dialer
 

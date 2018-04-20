@@ -27,7 +27,137 @@ class GameInfoTab extends StatelessWidget {
     }
 
     return new HorizontalChipList(game.releaseDates.map((r) =>
-    '${r.human} in ${r.region.name} for ${r.platform.name} ').toList());
+      '${DateTimeHelper.getMonthDayYear(r.date)} in ${r.region.name} on ${r.platform.name} ').toList()
+    );
+  }
+
+  Widget _getVideoItem(BuildContext context, Video video) {
+    return new InkWell(
+          onTap: () async {
+            String url = 'https://youtu.be/${video.videoId}';
+            if (await canLaunch(url)) {
+              await launch(url);
+            }
+            else {
+              print('could not launch $url');
+            }
+          },
+          child: new Stack(
+          children: <Widget>[
+            new Image.network(
+            'https://img.youtube.com/vi/${video.videoId}/0.jpg',
+              width: 150.0,
+            ),
+            new Container(
+              height: 100.0,
+              width: 150.0,
+              color: new Color(0x77000000),
+              child: new Icon(Icons.play_circle_outline, color: Colors.grey),
+            )
+          ]
+        )
+      );
+
+  }
+
+  Widget _getScreenshotItem(BuildContext context, IGDBImage image) {
+    Widget imageWidget = FadeInImage.assetNetwork(
+      placeholder: AssetHelper.ImagePlaceholderPath,
+      image: image.getImageUrl(IGDBImageSizes.HD720P),
+      width: 200.0,
+    );
+
+    return new InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => new Center(
+            child: new ImageCarousel(
+              <ImageProvider>[
+                new NetworkImage(image.getImageUrl(IGDBImageSizes.HD720P)),
+              ],
+              allowZoom: true,
+            ),
+          )
+        );
+//        Navigator.of(context).push(new MaterialPageRoute<Null>(
+//            builder: (BuildContext context) {
+//              return new Scaffold(
+//                appBar: new AppBar(
+//                  backgroundColor: Colors.transparent,
+//                ),
+//                backgroundColor: new Color(0x77000000),
+//                body: new Center(
+//                  child: new ImageCarousel(
+//                    <ImageProvider>[
+//                      new NetworkImage(image.getImageUrl(IGDBImageSizes.HD720P)),
+//                    ],
+//                    height: 150.0,
+//                    allowZoom: true,
+//                  ),
+//                ),
+//              );
+//            }
+//        ));
+      },
+      child: FadeInImage.assetNetwork(
+        placeholder: AssetHelper.ImagePlaceholderPath,
+        image: image.getImageUrl(IGDBImageSizes.HD720P),
+        width: 200.0,
+      ),
+    );
+  }
+
+  Widget _getScreenshotsCard(BuildContext context, GameModel game) {
+    if (game.screenshots == null || game.screenshots.length == 0) {
+      return new Container();
+    }
+
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _getHeaderText(context, 'Screenshots'),
+        new HorizontalScrollableMediaCard(
+          height: 125.0,
+          children: <Widget>[]..addAll(
+            game.screenshots.map((s){
+              return new Container(
+              margin: EdgeInsets.all(5.0),
+              child: _getScreenshotItem(context, s),
+              );
+            }).toList()
+          )
+        )
+      ],
+    );
+  }
+
+  Widget _getTrailersCard(BuildContext context, GameModel game) {
+    if (game.videos == null || game.videos.length == 0) {
+      return new Container();
+    }
+
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _getHeaderText(context, 'Trailers'),
+        new HorizontalScrollableMediaCard(
+            height: 125.0,
+            children: <Widget>[]..addAll(
+                game.videos.map((v){
+                  return new Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: _getVideoItem(context, v),
+                  );
+                }).toList()
+            )
+        )
+      ],
+    );
+  }
+
+  Widget _getHeaderText(BuildContext context, String text) {
+    return new Text(text, style: Theme.of(context).textTheme.headline,);
   }
 
   @override
@@ -36,8 +166,8 @@ class GameInfoTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _getReleaseDate(context, game),
-        _getPlatforms(context, game),
         _getGenres(context, game),
+        _getHeaderText(context, 'Summary'),
         new Card(
           elevation: 4.0,
           child: new Text(
@@ -45,43 +175,8 @@ class GameInfoTab extends StatelessWidget {
             style: Theme.of(context).textTheme.body2,
           ),
         ),
-        new Card(
-          elevation: 4.0,
-          child: new Text(
-            'Fan Rating: ${game.fanRating}',
-            style: Theme.of(context).textTheme.body2,
-          )
-        ),
-        new Card(
-            elevation: 4.0,
-            child: new Text(
-              'Critic Rating: ${game.criticRating}',
-              style: Theme.of(context).textTheme.body2,
-            )
-        ),
-        new Card(
-            elevation: 4.0,
-            child: new Text(
-              'Popularity: ${game.popularity}',
-              style: Theme.of(context).textTheme.body2,
-            )
-        ),
-        new InkWell(
-          onTap: () async {
-            String url = 'https://youtu.be/${game.videos.first.videoId}';
-            if (await canLaunch(url)) {
-              await launch(url);
-            }
-            else {
-              print('could not launch $url');
-            }
-          },
-          child: new Image.network(
-            'https://img.youtube.com/vi/${game.videos.first.videoId}/0.jpg',
-            height: 100.0,
-            width: 100.0,
-          ),
-        )
+        new GameDetailScreenshotsCard(game: game),
+        _getTrailersCard(context, game),
       ],
     );
   }

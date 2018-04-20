@@ -17,11 +17,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:side_header_list_view/side_header_list_view.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:image_carousel/image_carousel.dart';
 import 'package:flutter_speed_dialer/flutter_speed_dialer.dart';
 
 
 import 'package:local_notifications/local_notifications.dart';
-import 'package:igdb_client/igdb_client.dart' hide Image;
+import 'package:igdb_client/igdb_client.dart';
 
 part 'package:gametime/src/App/app.dart';
 part 'package:gametime/src/App/themes.dart';
@@ -44,6 +45,8 @@ part 'package:gametime/src/Components/grow_on_click_widget.dart';
 part 'package:gametime/src/Components/recent_game_card.dart';
 part 'package:gametime/src/Components/recent_game_list.dart';
 part 'package:gametime/src/Components/game_detail_fab_dial.dart';
+part 'package:gametime/src/Components/card_horizontal_scrollable_media.dart';
+part 'package:gametime/src/Components/game_detail_screenshots_card.dart';
 
 part 'package:gametime/src/Models/activity.dart';
 part 'package:gametime/src/Models/game_model.dart';
@@ -79,3 +82,4 @@ part 'package:gametime/src/Services/game_service_client.dart';
 
 part 'package:gametime/src/Utils/datetime_helper.dart';
 part 'package:gametime/src/Utils/notification_helper.dart';
+part 'package:gametime/src/Utils/asset_helper.dart';

@@ -22,8 +22,6 @@ class GameImage extends StatelessWidget {
     this.source='',
   });
 
-  final String placeholderPath = 'assets/img/placeholder.png';
-
   _onTap(BuildContext context, GameModel result) {
     Navigator.of(context).push(new MaterialPageRoute<Null>(
         builder: (BuildContext context) {
@@ -39,7 +37,7 @@ class GameImage extends StatelessWidget {
     Widget child;
     if (game.imageUrl == null) {
       child = new Image.asset(
-        placeholderPath,
+        AssetHelper.ImagePlaceholderPath,
         fit: fit,
         width: width,
         height: height,
@@ -48,7 +46,7 @@ class GameImage extends StatelessWidget {
     }
     else {
       child = new FadeInImage.assetNetwork(
-        placeholder: placeholderPath,
+        placeholder: AssetHelper.ImagePlaceholderPath,
         image: game.imageUrl,
         fit: fit,
         width: width,

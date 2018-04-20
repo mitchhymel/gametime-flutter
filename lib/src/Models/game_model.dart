@@ -14,6 +14,7 @@ class GameModel {
   final double fanRating;
   final double criticRating;
   final List<Video> videos;
+  final List<IGDBImage> screenshots;
   final Duration totalTimePlayed;
 
   GameModel({
@@ -30,6 +31,7 @@ class GameModel {
     this.fanRating,
     this.criticRating,
     this.videos,
+    this.screenshots,
     this.totalTimePlayed,
   });
 
@@ -65,6 +67,7 @@ class GameModel {
     double fanRating,
     double criticRating,
     List<Video> videos,
+    List<IGDBImage> screenshots,
     Duration totalTimePlayed,
   }){
     return new GameModel(
@@ -81,6 +84,7 @@ class GameModel {
       fanRating: fanRating ?? this.fanRating,
       criticRating: criticRating ?? this.criticRating,
       videos: videos ?? this.videos,
+      screenshots: screenshots ?? this.screenshots,
       totalTimePlayed: totalTimePlayed ?? this.totalTimePlayed,
     );
   }
@@ -119,11 +123,12 @@ class GameModel {
       releaseDates: game.releaseDates,
       platforms: game.platforms,
       genres: game.genres,
-      imageUrl: game.cover == null ? null : game.cover.getImageUrl(ImageSizes.HD720P, isRetina: true),
+      imageUrl: game.cover == null ? null : game.cover.getImageUrl(IGDBImageSizes.HD720P, isRetina: true),
       popularity: game.popularity,
       fanRating: game.rating,
       criticRating: game.aggregatedRating,
       videos: game.videos,
+      screenshots: game.screenshots,
     );
   }
 

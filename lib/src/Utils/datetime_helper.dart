@@ -10,6 +10,10 @@ class DateTimeHelper {
     return '${time.month}/${time.day}';
   }
 
+  static String getMonthDayYear(DateTime time) {
+    return '${time.month}/${time.day}/${time.year}';
+  }
+
   static String getDurationInHoursMins(Duration time) {
     if (time.inMinutes >= 60) {
       String hours = '${time.inHours}';

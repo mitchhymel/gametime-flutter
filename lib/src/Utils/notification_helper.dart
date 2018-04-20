@@ -7,7 +7,8 @@ class NotificationHelper {
       id: 'gametime_notifications',
       name: 'Active session',
       description: 'Indicates if there is an active session',
-      importance: AndroidNotificationChannelImportance.LOW
+      importance: AndroidNotificationChannelImportance.LOW,
+      vibratePattern: AndroidVibratePatterns.NONE,
   );
 
   static Future<Null> initialize() async {
@@ -27,6 +28,8 @@ class NotificationHelper {
         androidSettings: new AndroidSettings(
           isOngoing: true,
           channel: _channel,
+          priority: AndroidNotificationPriority.LOW,
+          vibratePattern: AndroidVibratePatterns.NONE,
         ),
         actions: [
           new NotificationAction(
