@@ -9,11 +9,11 @@ class _RecentGameListViewModel {
   static _RecentGameListViewModel fromStore(Store<AppState> store) {
     List<Session> copiedSessions = []..addAll(store.state.sessions);
     copiedSessions.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
-    List<Session> lastTwenty = copiedSessions.take(20).toList();
+    //List<Session> lastTwenty = copiedSessions.take(20).toList();
 
     List<_RecentGameModel> recents = new List<_RecentGameModel>();
-    while (recents.length <= 3 && lastTwenty.length > 0) {
-      Session first = lastTwenty.first;
+    while (copiedSessions.length > 0) {
+      Session first = copiedSessions.first;
 
       List<Session> sessions = copiedSessions.where((s) => s.gameId == first.gameId).toList();
       Duration total = new Duration();
@@ -44,7 +44,7 @@ class _RecentGameListViewModel {
         notificationCallback: () => store.dispatch(new EndSessionAction(DateTime.now())),
       ));
 
-      lastTwenty.removeWhere((s) => s.gameId == first.gameId);
+      copiedSessions.removeWhere((s) => s.gameId == first.gameId);
     }
 
     return new _RecentGameListViewModel(

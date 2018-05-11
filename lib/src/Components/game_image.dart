@@ -13,7 +13,7 @@ class GameImage extends StatelessWidget {
 
   GameImage({
     @required this.game,
-    this.fit = BoxFit.fill,
+    this.fit = BoxFit.scaleDown,
     this.width = 80.0,
     this.height = 80.0,
     this.alignment = Alignment.center,

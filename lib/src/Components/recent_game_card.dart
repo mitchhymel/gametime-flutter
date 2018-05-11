@@ -25,6 +25,16 @@ class RecentGameCard extends StatelessWidget {
   final _RecentGameModel recentGame;
   RecentGameCard(this.recentGame);
 
+  DecorationImage getImage(_RecentGameModel game) {
+
+    return new DecorationImage(
+      image: game.game.imageUrl == null ?
+          new AssetImage(AssetHelper.ImagePlaceholderPath)
+          : new NetworkImage(recentGame.game.imageUrl),
+      fit: BoxFit.cover,
+    );
+  }
+
   Widget _getThumbnail() {
     return new Container(
       alignment: new FractionalOffset(0.0, 0.5),
@@ -35,10 +45,7 @@ class RecentGameCard extends StatelessWidget {
           width: 80.0,
           height: 80.0,
           decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new NetworkImage(recentGame.game.imageUrl),
-                fit: BoxFit.cover,
-              ),
+              image: getImage(recentGame),
               borderRadius: new BorderRadius.all(
                 new Radius.circular(50.0),
               ),

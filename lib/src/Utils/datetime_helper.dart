@@ -17,7 +17,7 @@ class DateTimeHelper {
   static String getDurationInHoursMins(Duration time) {
     if (time.inMinutes >= 60) {
       String hours = '${time.inHours}';
-      int mins = time.inMinutes~/60;
+      int mins = time.inMinutes%60;
       String minutes = '${mins >= 10 ? mins : '0$mins'}';
       return '$hours:$minutes';
     }

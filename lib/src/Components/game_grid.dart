@@ -22,6 +22,7 @@ class GameGrid extends StatelessWidget {
         return new GameImage(
           game: game,
           heroTag: shouldUseImageHero ? game.id : null,
+            fit: BoxFit.cover
         );
       }).toList(),
     );

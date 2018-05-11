@@ -4,7 +4,7 @@ class NotificationHelper {
   static const _notificationId = 0;
 
   static const AndroidNotificationChannel _channel = const AndroidNotificationChannel(
-      id: 'gametime_notifications',
+      id: 'gametime_notifications2',
       name: 'Active session',
       description: 'Indicates if there is an active session',
       importance: AndroidNotificationChannelImportance.LOW,

@@ -54,9 +54,9 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
     double screenHeight = MediaQuery.of(context).size.height;
 
     double fadedImageWidth = screenWidth;
-    double fadedImageHeight = screenHeight / 2.5;
-    double clearImageWidth = screenWidth / 4;
-    double clearImageHeight = screenHeight / 6;
+    double fadedImageHeight = screenHeight / 2;
+    double clearImageWidth = screenWidth / 2.5;
+    double clearImageHeight = screenHeight / 4;
     
     return new SliverAppBar(
       title: new Text(game.name, style: Theme.of(context).textTheme.title),
@@ -72,6 +72,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                 heroTag: 'somethingelse',
                 width: fadedImageWidth,
                 height: fadedImageHeight,
+                fit: BoxFit.cover,
               ),
               new ClipRect(
                 child: new BackdropFilter(
@@ -109,6 +110,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                     width: clearImageWidth,
                     height: clearImageHeight,
                     heroTag: game.id + source,
+                    fit: BoxFit.scaleDown,
                   )
               ),
             ],

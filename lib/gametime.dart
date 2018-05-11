@@ -3,6 +3,7 @@ library gametime;
 import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as dartui;
+import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
