@@ -8,7 +8,7 @@ class GameSessionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (sessions.isEmpty) {
+    if (sessions == null || sessions.isEmpty) {
       return new Container();
     }
 

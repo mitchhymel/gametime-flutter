@@ -9,12 +9,14 @@ class GameModel {
   final List<Platforms> platforms;
   final List<Genres> genres;
   final List<ReleaseDate> releaseDates;
-  final int rating;
   final double popularity;
   final double fanRating;
   final double criticRating;
   final List<Video> videos;
   final List<IGDBImage> screenshots;
+
+  // user data
+  final int rating;
   final Duration totalTimePlayed;
 
   GameModel({
@@ -26,12 +28,12 @@ class GameModel {
     this.platforms = const [],
     this.genres = const [],
     this.releaseDates = const [],
-    this.rating,
     this.popularity,
     this.fanRating,
     this.criticRating,
     this.videos,
     this.screenshots,
+    this.rating,
     this.totalTimePlayed,
   });
 
@@ -62,13 +64,15 @@ class GameModel {
     List<Platforms> platforms,
     List<Genres> genres,
     List<ReleaseDate> releaseDates,
-    int rating,
     double popularity,
     double fanRating,
     double criticRating,
     List<Video> videos,
     List<IGDBImage> screenshots,
+    int rating,
     Duration totalTimePlayed,
+    List<Note> notes,
+    List<Session> sessions,
   }){
     return new GameModel(
       id: id ?? this.id,
@@ -79,12 +83,12 @@ class GameModel {
       platforms: platforms ?? this.platforms,
       genres: genres ?? this.genres,
       releaseDates: releaseDates ?? this.releaseDates,
-      rating: rating ?? this.rating,
       popularity: popularity ?? this.popularity,
       fanRating: fanRating ?? this.fanRating,
       criticRating: criticRating ?? this.criticRating,
       videos: videos ?? this.videos,
       screenshots: screenshots ?? this.screenshots,
+      rating: rating ?? this.rating,
       totalTimePlayed: totalTimePlayed ?? this.totalTimePlayed,
     );
   }

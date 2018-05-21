@@ -8,7 +8,7 @@ class GameNotesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (notes.isEmpty) {
+    if (notes == null || notes.isEmpty) {
       return new Container();
     }
 

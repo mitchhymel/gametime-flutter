@@ -9,15 +9,14 @@ class ActivityPageViewModel {
 
   static ActivityPageViewModel fromStore(Store<AppState> store) {
 
-    List<Activity> copiedActivities = []..addAll(store.state.notes)..addAll(store.state.sessions);
-    copiedActivities.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
-
-    List<Session> copiedSessions = []..addAll(store.state.sessions);
-    copiedSessions.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
+//    List<Activity> copiedActivities = []..addAll(store.state.notes)..addAll(store.state.sessions);
+//    copiedActivities.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
+//
+//    List<Session> copiedSessions = []..addAll(store.state.sessions);
+//    copiedSessions.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
 
     return new ActivityPageViewModel(
         games: store.state.games,
-        activities: copiedActivities,
         currentActiveSession: store.state.currentActiveSession,
     );
   }

@@ -4,8 +4,8 @@ part of gametime;
 class AppState {
 
   final Map<String, GameModel> games;
-  final List<Note> notes;
-  final List<Session> sessions;
+  final Map<String, List<Note>> gameToNotes;
+  final Map<String, List<Session>> gameToSessions;
   final Session currentActiveSession;
   final CustomTheme theme;
   final List<Query> queries;
@@ -14,8 +14,8 @@ class AppState {
 
   AppState({
     this.games,
-    this.notes,
-    this.sessions,
+    this.gameToNotes,
+    this.gameToSessions,
     this.currentActiveSession,
     this.theme,
     this.queries,
@@ -24,8 +24,8 @@ class AppState {
 
   AppState copyWith({
     Map<String, GameModel> games,
-    List<Note> notes,
-    List<Session> sessions,
+    Map<String, List<Note>> gameToNotes,
+    Map<String, List<Session>> gameToSessions,
     Session currentActiveSession,
     CustomTheme theme,
     List<Query> queries,
@@ -33,8 +33,8 @@ class AppState {
   }) {
     return new AppState(
       games: games ?? this.games,
-      notes: notes ?? this.notes,
-      sessions: sessions ?? this.sessions,
+      gameToNotes: gameToNotes ?? this.gameToNotes,
+      gameToSessions: gameToSessions ?? this.gameToSessions,
       currentActiveSession: currentActiveSession ?? this.currentActiveSession,
       theme: theme ?? this.theme,
       queries: queries ?? this.queries,
@@ -45,8 +45,8 @@ class AppState {
   static AppState initialState() {
     return new AppState(
         games: new Map<String, GameModel>(),
-        notes: new List<Note>(),
-        sessions: new List<Session>(),
+        gameToNotes: new Map<String, List<Note>>(),
+        gameToSessions: new Map<String, List<Session>>(),
         currentActiveSession: new Session(gameId: ''),
         theme: new BlackRedTheme(),
         queries: Query.getDefault(),
@@ -58,8 +58,8 @@ class AppState {
   String toString() {
     return JSON.encode({
       'games': this.games.toString(),
-      'notes': this.notes.toString(),
-      'sessions': this.sessions.toString(),
+      'notes': this.gameToNotes.toString(),
+      'sessions': this.gameToSessions.toString(),
       'currentActiveSession': this.currentActiveSession.toString(),
       'firebaseUser': this.firebaseUser.toString()
     });

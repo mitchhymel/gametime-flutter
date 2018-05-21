@@ -32,46 +32,56 @@ AppState stateReducer(AppState state, action) {
     );
   }
   else if (action is RemoveGameCompleteAction) {
-    Map<String, GameModel> copy = state.games;
-    copy.remove(action.game.id);
+    Map<String, GameModel> gamesCopy = {}..addAll(state.games);
+    gamesCopy.remove(action.game.id);
+
     return state.copyWith(
-      games: <String, GameModel>{}
-        ..addAll(copy)
+      games: gamesCopy,
     );
   }
   else if (action is AddNoteCompleteAction) {
-    List<Note> newNotes = []..addAll(state.notes);
-    if (!newNotes.contains(action.note)) {
-      newNotes.add(action.note);
+    Map<String, List<Note>> newMap = {}..addAll(state.gameToNotes);
+    if (state.gameToNotes.containsKey(action.note.gameId)) {
+      List<Note> oldList = state.gameToNotes[action.note.gameId];
+      newMap.remove(action.note.gameId);
+      List<Note> newList = []..addAll(oldList)..add(action.note);
+      newList.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
+      newMap.putIfAbsent(action.note.gameId, () => newList);
     }
+    else {
+      newMap.putIfAbsent(action.note.gameId, () => [action.note]);
+    }
+
     return state.copyWith(
-      notes: newNotes
+      gameToNotes: newMap
     );
   }
   else if (action is AddNotesCompleteAction) {
-    List<Note> newNotes = []..addAll(state.notes);
-    action.notes.forEach((Note note) {
-      if (!newNotes.contains(note)) {
-        newNotes.add(note);
-      }
-    });
-    return state.copyWith(
-      notes: newNotes
-    );
+//    List<Note> newNotes = []..addAll(state.notes);
+//    action.notes.forEach((Note note) {
+//      if (!newNotes.contains(note)) {
+//        newNotes.add(note);
+//      }
+//    });
+//    return state.copyWith(
+//      notes: newNotes
+//    );
   }
   else if (action is RemoveNotesCompleteAction) {
-    List<Note> copy = []..addAll(state.notes);
-    copy.removeWhere((note) => note.gameId == action.gameId);
+    Map<String, List<Note>> mapCopy = {}..addAll(state.gameToNotes);
+    mapCopy.remove(action.gameId);
     return state.copyWith(
-      notes: []
-          ..addAll(copy)
+        gameToNotes: mapCopy
     );
   }
   else if (action is RemoveNoteCompleteAction) {
-    List<Note> copyNotes = []..addAll(state.notes);
-    copyNotes.removeWhere((note) => note == action.note);
+    Map<String, List<Note>> mapCopy = {}..addAll(state.gameToNotes);
+    List<Note> notesCopy = mapCopy[action.note.gameId];
+    notesCopy.removeWhere((note) => note == action.note);
+    mapCopy.remove(action.note.gameId);
+    mapCopy.putIfAbsent(action.note.gameId, () => notesCopy);
     return state.copyWith(
-        notes: []..addAll(copyNotes)
+        gameToNotes: mapCopy,
     );
   }
   else if (action is StartSessionCompleteAction) {
@@ -80,41 +90,58 @@ AppState stateReducer(AppState state, action) {
     );
   }
   else if (action is EndSessionCompleteAction) {
+    Session newSession = new Session(
+        gameId: state.currentActiveSession.gameId,
+        dateStarted: state.currentActiveSession.dateStarted,
+        dateEnded: action.dateEnded
+    );
+    Map<String, List<Session>> copyMap = {}..addAll(state.gameToSessions);
+    if (copyMap.containsKey(newSession.gameId)) {
+      List<Session> oldList = copyMap[newSession.gameId];
+      copyMap.remove(newSession.gameId);
+      List<Session> newList = []..addAll(oldList)..add(newSession);
+      newList.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
+      copyMap.putIfAbsent(newSession.gameId, () => newList);
+    }
+    else {
+      copyMap.putIfAbsent(newSession.gameId, () => [newSession]);
+    }
+
     return state.copyWith(
       currentActiveSession: new Session(
         gameId: ''
       ),
-      sessions: []
-        ..addAll(state.sessions)
-        ..add(new Session(
-            gameId: state.currentActiveSession.gameId,
-            dateStarted: state.currentActiveSession.dateStarted,
-            dateEnded: action.dateEnded
-          )
-        )
+      gameToSessions: copyMap,
     );
   }
   else if (action is AddSessionCompleteAction) {
-    List<Session> newSessions = []..addAll(state.sessions);
-    if (!newSessions.contains(action.session)) {
-      newSessions.add(action.session);
+    Map<String, List<Session>> newMap = {}..addAll(state.gameToSessions);
+    if (state.gameToSessions.containsKey(action.session.gameId)) {
+      List<Session> oldList = state.gameToSessions[action.session.gameId];
+      newMap.remove(action.session.gameId);
+      List<Session> newList = []..addAll(oldList)..add(action.session);
+      newList.sort((a,b) => b.getDateTime().compareTo(a.getDateTime()));
+      newMap.putIfAbsent(action.session.gameId, () => newList);
+    }
+    else {
+      newMap.putIfAbsent(action.session.gameId, () => [action.session]);
     }
 
     return state.copyWith(
-      sessions: newSessions
+      gameToSessions: newMap,
     );
   }
   else if (action is AddSessionsCompleteAction) {
-    List<Session> newSessions = []..addAll(state.sessions);
-    action.sessions.forEach((session) {
-      if (!newSessions.contains(session)) {
-        newSessions.add(session);
-      }
-    });
-
-    return state.copyWith(
-      sessions: newSessions
-    );
+//    List<Session> newSessions = []..addAll(state.sessions);
+//    action.sessions.forEach((session) {
+//      if (!newSessions.contains(session)) {
+//        newSessions.add(session);
+//      }
+//    });
+//
+//    return state.copyWith(
+//      sessions: newSessions
+//    );
   }
   else if (action is AddActiveSessionAction) {
     return state.copyWith(
@@ -122,18 +149,20 @@ AppState stateReducer(AppState state, action) {
     );
   }
   else if (action is RemoveSessionsCompleteAction) {
-    List<Session> copySessions = state.sessions;
-    copySessions.removeWhere((session) => session.gameId == action.gameId);
+    Map<String, List<Session>> mapCopy = {}..addAll(state.gameToSessions);
+    mapCopy.remove(action.gameId);
     return state.copyWith(
-      sessions: []
-          ..addAll(copySessions)
+      gameToSessions: mapCopy
     );
   }
   else if (action is RemoveSessionCompleteAction) {
-    List<Session> copySessions = state.sessions;
-    copySessions.removeWhere((session) => session == action.session);
+    Map<String, List<Session>> mapCopy = {}..addAll(state.gameToSessions);
+    List<Session> listCopy = mapCopy[action.session.gameId];
+    listCopy.removeWhere((session) => session == action.session);
+    mapCopy.remove(action.session.gameId);
+    mapCopy.putIfAbsent(action.session.gameId, () => listCopy);
     return state.copyWith(
-        sessions: []..addAll(copySessions)
+      gameToSessions: mapCopy,
     );
   }
 

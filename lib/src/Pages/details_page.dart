@@ -12,8 +12,8 @@ class _DetailsPageViewModel {
 
   static _DetailsPageViewModel fromStore(Store<AppState> store, GameModel game) {
     return new _DetailsPageViewModel(
-        notes: store.state.notes.where((note) => note.gameId == game.id).toList(),
-        sessions: store.state.sessions.where((session) => session.gameId == game.id).toList(),
+      notes: store.state.gameToNotes[game.id],
+      sessions: store.state.gameToSessions[game.id],
     );
   }
 }

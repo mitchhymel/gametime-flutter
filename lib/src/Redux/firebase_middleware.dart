@@ -92,8 +92,8 @@ _loginCompleteActionReducer(Store<AppState> store, action) {
       .collection(FirebaseUsersKey)
       .document(action.firebaseUser.uid);
 
-  _listenToActiveSession(store, reference);
   _listenToCollection(store, reference);
+  _listenToActiveSession(store, reference);
   _listenToNotes(store, reference);
   _listenToSessions(store, reference);
 }
@@ -146,7 +146,8 @@ _listenToNotes(Store<AppState> store, DocumentReference reference) {
     if (event != null) {
       event.documents.forEach((doc) {
         Note note = FirebaseModelUtils.noteFromSnapshot(doc);
-        if (!store.state.notes.contains(note)) {
+        if (!store.state.gameToNotes.containsKey(note.gameId)
+            || !store.state.gameToNotes[note.gameId].contains(note)) {
           store.dispatch(new AddNoteCompleteAction(note));
         }
       });
@@ -159,7 +160,9 @@ _listenToSessions(Store<AppState> store, DocumentReference reference) {
     if (event != null) {
       event.documents.forEach((doc) {
         Session session = FirebaseModelUtils.sessionFromSnapshot(doc);
-        if (!store.state.sessions.contains(session)) {
+
+        if (!store.state.gameToSessions.containsKey(session.gameId)
+            || !store.state.gameToSessions[session.gameId].contains(session)) {
           store.dispatch(new AddSessionCompleteAction(session));
         }
       });

@@ -8,25 +8,18 @@ class GameStatsTab extends StatelessWidget {
 
 
   Widget _getTotalPlayTime(List<Session> sessions) {
-
-    double minutes = 0.0;
-
-    sessions.forEach((s) => minutes += (s.dateEnded.difference(s.dateStarted).inMinutes));
-    double hours = minutes/60.0;
-
-    int hoursToDisplay = hours.toInt();
-    int mintuesToDisplay = (minutes%60).toInt();
-    String text = "$hoursToDisplay:$mintuesToDisplay";
+    Duration total = new Duration();
+    sessions.forEach((s) => total += (s.dateEnded.difference(s.dateStarted)));
 
     return new TextCard(
-      mainText: text,
+      mainText: DateTimeHelper.getDurationInHoursMins(total),
       footerText: "Total Play Time",
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (sessions.isEmpty) {
+    if (sessions == null || sessions.isEmpty) {
       return new Container();
     }
 
