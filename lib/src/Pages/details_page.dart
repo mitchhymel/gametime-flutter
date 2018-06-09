@@ -139,7 +139,6 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     debugPrint(game.toString());

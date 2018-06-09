@@ -48,6 +48,8 @@ part 'package:gametime/src/Components/recent_game_list.dart';
 part 'package:gametime/src/Components/game_detail_fab_dial.dart';
 part 'package:gametime/src/Components/card_horizontal_scrollable_media.dart';
 part 'package:gametime/src/Components/game_detail_screenshots_card.dart';
+part 'package:gametime/src/Components/paginated_infinite_scroll_view.dart';
+part 'package:gametime/src/Components/release_date_card.dart';
 
 part 'package:gametime/src/Models/activity.dart';
 part 'package:gametime/src/Models/game_model.dart';
@@ -70,6 +72,7 @@ part 'package:gametime/src/Pages/game_info_tab.dart';
 part 'package:gametime/src/Pages/game_notes_tab.dart';
 part 'package:gametime/src/Pages/game_sessions_tab.dart';
 part 'package:gametime/src/Pages/game_stats_tab.dart';
+part 'package:gametime/src/Pages/browse_page.dart';
 
 part 'package:gametime/src/Redux/actions.dart';
 part 'package:gametime/src/Redux/app_state.dart';

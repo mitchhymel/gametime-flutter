@@ -46,11 +46,11 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
           controller: _controller,
           tabs: <Tab> [
             new Tab(
-              icon: new Icon(Icons.home, color: iconColor),
-              text: 'Home',
+              icon: new Icon(Icons.search, color: iconColor),
+              text: 'Browse',
             ),
             new Tab(
-              icon: new Icon(Icons.calendar_today, color: iconColor),
+              icon: new Icon(Icons.home, color: iconColor),
               text: 'Activity'
             ),
             new Tab(
@@ -82,7 +82,7 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
       body: new TabBarView(
         controller: _controller,
         children: <Widget>[
-          new HomePage(),
+          new BrowsePage(),
           new ActivityPage(),
           new CollectionPage(),
         ],

@@ -160,11 +160,29 @@ class GameInfoTab extends StatelessWidget {
     return new Text(text, style: Theme.of(context).textTheme.headline,);
   }
 
+  Widget _getActions(BuildContext context) {
+    return new Row(
+      children: <Widget>[
+        new RaisedButton(
+          shape: new RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))),
+          onPressed: (){},
+          child: new Row(
+            children: <Widget>[
+              new Icon(Icons.add),
+              new Text('Add'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        //_getActions(context),
         _getReleaseDate(context, game),
         _getGenres(context, game),
         _getHeaderText(context, 'Summary'),
