@@ -75,6 +75,9 @@ class _PaginatedInfiniteScrollViewState<T> extends State<PaginatedInfiniteScroll
 
   Future<Null> onRefresh() async {
     this.request?.timeout(const Duration());
+    setState((){
+      items = [];
+    });
     List<T> fetched = await widget.pageRequest(0, widget.pageSize);
     setState(() {
       items = fetched;

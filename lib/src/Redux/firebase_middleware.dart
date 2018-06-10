@@ -4,6 +4,8 @@ const String FirebaseUsersKey = 'users';
 const String FirebaseCollectionKey = 'collection';
 const String FirebaseNotesKey = 'notes';
 const String FirebaseSessionsKey = 'sessions';
+const String FirebaseCurrentActiveSessionFieldKey = 'currentActiveSession';
+const String FirebaseUserRegionFieldKey = 'region';
 
 firebaseMiddleware(Store<AppState> store, action, NextDispatcher next) async {
   if (action is InitAction) {
@@ -17,6 +19,9 @@ firebaseMiddleware(Store<AppState> store, action, NextDispatcher next) async {
   }
   else if (action is LogoutAction) {
     _logoutActionReducer(store, action);
+  }
+  else if (action is ChangeRegionAction) {
+    _changeRegionActionReducer(store, action);
   }
   else if (action is AddGameAction) {
     _addGameActionReducer(store, action);
@@ -92,6 +97,7 @@ _loginCompleteActionReducer(Store<AppState> store, action) {
       .collection(FirebaseUsersKey)
       .document(action.firebaseUser.uid);
 
+
   _listenToCollection(store, reference);
   _listenToActiveSession(store, reference);
   _listenToNotes(store, reference);
@@ -101,12 +107,17 @@ _loginCompleteActionReducer(Store<AppState> store, action) {
 _listenToActiveSession(Store<AppState> store, DocumentReference reference) {
   reference.snapshots.listen((DocumentSnapshot event){
     if (event != null) {
-      Map persistedValue = event.data['currentActiveSession'];
+      Map persistedValue = event.data[FirebaseCurrentActiveSessionFieldKey];
       if (persistedValue != null) {
         Session activeSession = Session.fromMap(persistedValue);
         if (activeSession.isValidActiveSession()) {
           store.dispatch(new AddActiveSessionAction(activeSession));
         }
+      }
+
+      int regionId = event.data[FirebaseUserRegionFieldKey];
+      if (regionId != null) {
+        store.dispatch(new ChangeRegionCompleteAction(Regions.fromInt(regionId)));
       }
     }
   });
@@ -176,6 +187,15 @@ _logoutActionReducer(Store<AppState> store, action) async {
   store.dispatch(new LogoutCompleteAction());
 }
 
+_changeRegionActionReducer(Store<AppState> store, ChangeRegionAction action) {
+  Firestore.instance
+      .collection(FirebaseUsersKey)
+      .document(store.state.firebaseUser.uid)
+      .updateData({'region': action.region.id});
+
+  store.dispatch(new ChangeRegionCompleteAction(action.region));
+}
+
 _addGameActionReducer(Store<AppState> store, action) {
   Firestore.instance
       .collection(FirebaseUsersKey)
@@ -228,21 +248,22 @@ _startSessionActionReducer(Store<AppState> store, action) {
   Firestore.instance
       .collection(FirebaseUsersKey)
       .document(store.state.firebaseUser.uid)
-      .setData({
-    'currentActiveSession' : action.session.toMap()
+      .updateData({
+    FirebaseCurrentActiveSessionFieldKey : action.session.toMap()
   });
 
   store.dispatch(new StartSessionCompleteAction(action.session));
 }
+
 _endSessionActionReducer(Store<AppState> store, action) {
   Map<String, dynamic> data = {
-    'currentActiveSession' : Session.getInactiveSession().toMap()
+    FirebaseCurrentActiveSessionFieldKey : Session.getInactiveSession().toMap()
   };
 
   Firestore.instance
       .collection(FirebaseUsersKey)
       .document(store.state.firebaseUser.uid)
-      .setData(data);
+      .updateData(data);
 
   Session newSession = new Session(
       gameId: store.state.currentActiveSession.gameId,
@@ -255,7 +276,7 @@ _endSessionActionReducer(Store<AppState> store, action) {
       .document(store.state.firebaseUser.uid)
       .getCollection(FirebaseSessionsKey)
       .document(store.state.currentActiveSession.dateStarted.toString())
-      .setData(newSession.toMap());
+      .updateData(newSession.toMap());
 
   store.dispatch(new EndSessionCompleteAction(action.dateEnded));
 }

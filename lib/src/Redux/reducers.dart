@@ -17,6 +17,11 @@ AppState stateReducer(AppState state, action) {
       theme: action.theme
     );
   }
+  else if (action is ChangeRegionCompleteAction) {
+    return state.copyWith(
+      region: action.region,
+    );
+  }
   else if (action is AddGameCompleteAction) {
     return state.copyWith(
       games: <String, GameModel>{}

@@ -1,5 +1,6 @@
 part of gametime;
 
+
 //region Theme actions
 class ChangeThemeAction {
   final CustomTheme theme;
@@ -34,6 +35,16 @@ class LogoutAction {
 
 class LogoutCompleteAction {
   LogoutCompleteAction();
+}
+
+class ChangeRegionAction {
+  final Regions region;
+  ChangeRegionAction(this.region);
+}
+
+class ChangeRegionCompleteAction {
+  final Regions region;
+  ChangeRegionCompleteAction(this.region);
 }
 
 //endregion

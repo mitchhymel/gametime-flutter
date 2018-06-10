@@ -50,6 +50,7 @@ part 'package:gametime/src/Components/card_horizontal_scrollable_media.dart';
 part 'package:gametime/src/Components/game_detail_screenshots_card.dart';
 part 'package:gametime/src/Components/paginated_infinite_scroll_view.dart';
 part 'package:gametime/src/Components/release_date_card.dart';
+part 'package:gametime/src/Components/release_date_chip_list.dart';
 
 part 'package:gametime/src/Models/activity.dart';
 part 'package:gametime/src/Models/game_model.dart';

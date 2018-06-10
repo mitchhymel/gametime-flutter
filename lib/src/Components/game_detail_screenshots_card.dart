@@ -19,7 +19,7 @@ class _GameDetailScreenshotsCardState extends State<GameDetailScreenshotsCard> w
     super.initState();
     _tabController = new TabController(
         vsync: this,
-        length: widget.game.screenshots.length
+        length: widget.game.screenshots.length,
     );
   }
 
@@ -33,7 +33,8 @@ class _GameDetailScreenshotsCardState extends State<GameDetailScreenshotsCard> w
     return new Text(text, style: Theme.of(context).textTheme.headline,);
   }
 
-  Widget _getScreenshotItem(BuildContext context, IGDBImage image) {
+  Widget _getScreenshotItem(BuildContext context, int i) {
+    IGDBImage image = widget.game.screenshots[i];
     return new InkWell(
       onTap: () {
         showDialog(
@@ -45,9 +46,15 @@ class _GameDetailScreenshotsCardState extends State<GameDetailScreenshotsCard> w
                 )),
                 allowZoom: false,
                 fit: BoxFit.fitHeight,
+                tabController: _tabController,
               ),
             )
         );
+
+        // set index AFTER showing dialog
+        // if its set before, then you have to double tap to show the dialog
+        // not sure why :/
+        _tabController.index = i;
       },
       child: FadeInImage.assetNetwork(
         placeholder: AssetHelper.ImagePlaceholderPath,
@@ -63,21 +70,22 @@ class _GameDetailScreenshotsCardState extends State<GameDetailScreenshotsCard> w
       return new Container();
     }
 
+    List<Widget> children = [];
+    for (int i = 0; i < widget.game.screenshots.length; i++) {
+      children.add(new Container(
+        margin: EdgeInsets.all(5.0),
+        child: _getScreenshotItem(context, i)
+      ));
+    }
+
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _getHeaderText(context, 'Screenshots'),
         new HorizontalScrollableMediaCard(
             height: 125.0,
-            children: <Widget>[]..addAll(
-                widget.game.screenshots.map((s){
-                  return new Container(
-                    margin: EdgeInsets.all(5.0),
-                    child: _getScreenshotItem(context, s),
-                  );
-                }).toList()
-            )
-        )
+            children: children,
+          )
       ],
     );
   }

@@ -10,7 +10,7 @@ class AppState {
   final CustomTheme theme;
   final List<Query> queries;
   final FirebaseUser firebaseUser;
-  final Regions region = Regions.NORTH_AMERICA;
+  final Regions region;
 
   AppState({
     this.games,
@@ -19,7 +19,8 @@ class AppState {
     this.currentActiveSession,
     this.theme,
     this.queries,
-    this.firebaseUser
+    this.firebaseUser,
+    this.region,
   });
 
   AppState copyWith({
@@ -29,7 +30,8 @@ class AppState {
     Session currentActiveSession,
     CustomTheme theme,
     List<Query> queries,
-    FirebaseUser firebaseUser
+    FirebaseUser firebaseUser,
+    Regions region,
   }) {
     return new AppState(
       games: games ?? this.games,
@@ -38,7 +40,8 @@ class AppState {
       currentActiveSession: currentActiveSession ?? this.currentActiveSession,
       theme: theme ?? this.theme,
       queries: queries ?? this.queries,
-      firebaseUser: firebaseUser ?? this.firebaseUser
+      firebaseUser: firebaseUser ?? this.firebaseUser,
+      region: region ?? this.region,
     );
   }
 
@@ -50,7 +53,8 @@ class AppState {
         currentActiveSession: new Session(gameId: ''),
         theme: new BlackRedTheme(),
         queries: Query.getDefault(),
-        firebaseUser: null
+        firebaseUser: null,
+        region: Regions.NORTH_AMERICA,
     );
   }
 

@@ -15,7 +15,7 @@ class ReleaseDateCard extends StatelessWidget {
             game: model,
             height: 100.0,
             width: 100.0,
-            source: 'homepage${date.platform.id}${date.region.id}',
+            source: 'homepage${date.id}',
           ),
           new Flexible(
               child: new Column(
