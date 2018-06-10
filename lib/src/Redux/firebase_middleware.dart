@@ -49,38 +49,51 @@ firebaseMiddleware(Store<AppState> store, action, NextDispatcher next) async {
 }
 
 _initActionReducer(Store<AppState> store, action) async {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  if (store.state.firebaseUser == null) {
-    auth.currentUser().then((user) async {
-      if (user != null) {
-        store.dispatch(new LoginCompleteAction(user));
-      }
-      else {
-        final GoogleSignIn _googleSignIn = new GoogleSignIn();
-        final GoogleSignInAccount gUser = await _googleSignIn.signInSilently();
-        if (gUser != null) {
-          final GoogleSignInAuthentication gAuth = await gUser.authentication;
-          final FirebaseUser fbUser = await auth.signInWithGoogle(
-              idToken: gAuth.idToken,
-              accessToken: gAuth.accessToken
-          );
-
-          if (fbUser != null) {
-            store.dispatch(new LoginCompleteAction(fbUser));
-          }
-        }
-        else {
-          debugPrint('guser was null after silent sign in');
-        }
-      }
-    });
+  GoogleSignInAccount gsa = store.state.googleUser ;
+  if (gsa == null) {
+    final GoogleSignIn _googleSignIn = new GoogleSignIn(
+        scopes: [
+          'email',
+          'https://www.googleapis.com/auth/calendar'
+        ]
+    );
+    gsa = await _googleSignIn.signInSilently();
+    if (gsa == null) {
+      debugPrint('Failed to sign into Google silently');
+      return;
+    }
   }
+
+  FirebaseUser fbUser = store.state.firebaseUser;
+  if (fbUser == null) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    fbUser = await auth.currentUser();
+    if (fbUser == null) {
+      final GoogleSignInAuthentication gAuth = await gsa.authentication;
+      fbUser = await auth.signInWithGoogle(
+          idToken: gAuth.idToken,
+          accessToken: gAuth.accessToken
+      );
+
+      if (fbUser == null) {
+        debugPrint('Failed to sign into Firebase with Google creds');
+        return;
+      }
+    }
+  }
+
+  store.dispatch(new LoginCompleteAction(fbUser, gsa));
 }
 
 _loginActionReducer(Store<AppState> store, action) async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = new GoogleSignIn();
-  final GoogleSignInAccount gUser = await _googleSignIn.signIn();
+  final GoogleSignIn googleSignIn = new GoogleSignIn(
+      scopes: [
+        'email',
+        'https://www.googleapis.com/auth/calendar'
+      ]
+  );
+  final GoogleSignInAccount gUser = await googleSignIn.signIn();
   final GoogleSignInAuthentication gAuth = await gUser.authentication;
   final FirebaseUser user = await _auth.signInWithGoogle(
       idToken: gAuth.idToken,
@@ -89,7 +102,7 @@ _loginActionReducer(Store<AppState> store, action) async {
 
   debugPrint('logged in as user ${user.uid}');
 
-  store.dispatch(new LoginCompleteAction(user));
+  store.dispatch(new LoginCompleteAction(user, gUser));
 }
 
 _loginCompleteActionReducer(Store<AppState> store, action) {

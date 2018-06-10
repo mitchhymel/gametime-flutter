@@ -26,7 +26,8 @@ class LoginAction {
 
 class LoginCompleteAction {
   final FirebaseUser firebaseUser;
-  LoginCompleteAction(this.firebaseUser);
+  final GoogleSignInAccount googleUser;
+  LoginCompleteAction(this.firebaseUser, this.googleUser);
 }
 
 class LogoutAction {

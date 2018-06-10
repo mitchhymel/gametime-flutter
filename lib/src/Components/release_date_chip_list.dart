@@ -33,10 +33,9 @@ class ReleaseDateChipList extends StatelessWidget {
           return new Container();
         }
 
-        return new HorizontalChipList(
-            releaseDatesForRegion
-                .map((r) => '${DateTimeHelper.getMonthDayYear(r.date)} on ${r.platform.name}')
-                .toList()
+        return new HorizontalChipList<ReleaseDate>(
+          list: releaseDatesForRegion,
+          stringTransform: (r) => '${DateTimeHelper.getMonthDayYear(r.date)} on ${r.platform.name}',
         );
       },
     );

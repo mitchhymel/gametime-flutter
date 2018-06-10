@@ -10,7 +10,10 @@ class GameInfoTab extends StatelessWidget {
       return new Container();
     }
 
-    return new HorizontalChipList(game.genres.map((g) => g.name).toList());
+    return new HorizontalChipList(
+      list: game.genres,
+      stringTransform: (g) => g.name,
+    );
   }
 
   Widget _getVideoItem(BuildContext context, Video video) {

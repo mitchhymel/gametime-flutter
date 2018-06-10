@@ -27,7 +27,10 @@ class ReleaseDateCard extends StatelessWidget {
                       child: new Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          new HorizontalChipList(model.genres.map((g) => g.name).toList()),
+                          new HorizontalChipList(
+                            list: model.genres,
+                            stringTransform: (g) => g.name,
+                          ),
                           new Text('${DateTimeHelper.getMonthDay(date.date)} on ${date.platform.name}', style: Theme.of(context).textTheme.caption)
                         ],
                       )

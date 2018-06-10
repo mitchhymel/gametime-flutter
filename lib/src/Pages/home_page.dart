@@ -67,7 +67,10 @@ class _HomePageState extends State<HomePage> {
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      new HorizontalChipList(model.genres.map((g) => g.name).toList()),
+                      new HorizontalChipList(
+                        list: model.genres,
+                        stringTransform: (g) => g.name,
+                      ),
                       new Text(date.platform.name, style: Theme.of(context).textTheme.caption)
                     ],
                   )

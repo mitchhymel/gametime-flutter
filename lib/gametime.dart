@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as dartui;
 import 'dart:io';
+import 'package:http/http.dart';
 
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ import 'package:redux/redux.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/calendar/v3.dart' hide Colors;
+import 'package:googleapis_auth/auth_io.dart';
 
 import 'package:side_header_list_view/side_header_list_view.dart';
 import 'package:share/share.dart';
@@ -84,6 +87,8 @@ part 'package:gametime/src/Redux/reducers.dart';
 part 'package:gametime/src/Services/api_keys.dart';
 part 'package:gametime/src/Services/firebase_models.dart';
 part 'package:gametime/src/Services/game_service_client.dart';
+part 'package:gametime/src/Services/google_http_client.dart';
+part 'package:gametime/src/Services/google_calendar_client.dart';
 
 part 'package:gametime/src/Utils/datetime_helper.dart';
 part 'package:gametime/src/Utils/notification_helper.dart';

@@ -10,6 +10,8 @@ dependencies:
   side_header_list_view:
   share:
   url_launcher:
+  googleapis:
+  googleapis_auth:
   google_sign_in:
   firebase_auth:
   cloud_firestore: 0.3.0

@@ -6,7 +6,8 @@ AppState stateReducer(AppState state, action) {
   }
   else if (action is LoginCompleteAction) {
     return state.copyWith(
-      firebaseUser: action.firebaseUser
+      firebaseUser: action.firebaseUser,
+      googleUser: action.googleUser,
     );
   }
   else if (action is LogoutCompleteAction) {

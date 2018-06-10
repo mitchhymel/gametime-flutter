@@ -12,6 +12,7 @@ class _GameDetailFabDialViewModel {
   final bool addNoteButtonDisabled;
   final bool addRemoveButtonDisabled;
   final bool startStopButtonDisabled;
+  final GoogleSignInAccount googleUser;
 
   _GameDetailFabDialViewModel({
     this.addGameCallback,
@@ -23,7 +24,8 @@ class _GameDetailFabDialViewModel {
     this.endSessionCallback,
     this.addNoteButtonDisabled,
     this.addRemoveButtonDisabled,
-    this.startStopButtonDisabled
+    this.startStopButtonDisabled,
+    this.googleUser,
   });
 
   static _GameDetailFabDialViewModel fromStore(Store<AppState> store, GameModel game) {
@@ -45,7 +47,8 @@ class _GameDetailFabDialViewModel {
         activeSessionIsThisGame: activeSessionIsThisGame,
         addNoteButtonDisabled: addNoteButtonDisabled,
         addRemoveButtonDisabled: addRemoveButtonDisabled,
-        startStopButtonDisabled: startStopButtonDisabled
+        startStopButtonDisabled: startStopButtonDisabled,
+        googleUser: store.state.googleUser,
     );
   }
 }
@@ -179,15 +182,49 @@ class GameDetailFabDial extends StatelessWidget {
     );
   }
 
+  Widget _getAddToCalendarFab(BuildContext context,
+      _GameDetailFabDialViewModel viewModel) {
+    return _getFabItem(
+      context,
+      Icons.calendar_today,
+      'Save Release',
+      () {
+        List<Widget> children = [];
+        children.addAll(game.releaseDates.map((r) => new SimpleDialogOption(
+          child: new Text('${DateTimeHelper.getMonthDayYear(r.date)} on ${r.platform.name} in ${r.region.name}',
+            style: Theme.of(context).textTheme.body2,
+          ),
+          onPressed: () async {
+            final client = new GoogleCalendarClient();
+            await client.init(viewModel.googleUser);
+            await client.createEvent(game, r);
+          },
+        )));
 
+        showDialog(
+          context: context,
+          builder: (context) {
+            return new SimpleDialog(
+              title: new Text('Save to calendar for which release date?'),
+              children: children,
+            );
+          }
+        );
+      }
+    );
+  }
 
   List<Widget> _getFabItems(BuildContext context,
       _GameDetailFabDialViewModel viewModel) {
-    return [
+
+    List<Widget> list = [
       _getAddRemoveFab(context, viewModel),
       _getNoteFab(context, viewModel),
       _getStartStopFab(context, viewModel),
+      _getAddToCalendarFab(context, viewModel)
     ];
+
+    return list;
   }
 
   @override

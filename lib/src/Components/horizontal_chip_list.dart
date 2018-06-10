@@ -1,9 +1,12 @@
 part of gametime;
 
-class HorizontalChipList extends StatelessWidget {
+typedef String StringTransformer<T>(T t);
 
-  final List<String> list;
-  HorizontalChipList(this.list);
+class HorizontalChipList<T> extends StatelessWidget {
+
+  final List<T> list;
+  final StringTransformer<T> stringTransform;
+  HorizontalChipList({this.list, this.stringTransform});
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +16,18 @@ class HorizontalChipList extends StatelessWidget {
       child: new ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[]
-          ..addAll(list.map((text) => new Container(
+          ..addAll(list.map((item) =>
+          new Container(
             margin: new EdgeInsets.symmetric(horizontal: 2.0),
             child:  new Chip(
               label: new Text(
-                  text,
+                stringTransform(item),
                 style: Theme.of(context).textTheme.body2,
               ),
               backgroundColor: Theme.of(context).primaryColor,
             ),
-          ))),
+          )
+          )),
       ),
     );
   }

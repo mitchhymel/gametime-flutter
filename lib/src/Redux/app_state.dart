@@ -10,6 +10,7 @@ class AppState {
   final CustomTheme theme;
   final List<Query> queries;
   final FirebaseUser firebaseUser;
+  final GoogleSignInAccount googleUser;
   final Regions region;
 
   AppState({
@@ -20,6 +21,7 @@ class AppState {
     this.theme,
     this.queries,
     this.firebaseUser,
+    this.googleUser,
     this.region,
   });
 
@@ -31,6 +33,7 @@ class AppState {
     CustomTheme theme,
     List<Query> queries,
     FirebaseUser firebaseUser,
+    GoogleSignInAccount googleUser,
     Regions region,
   }) {
     return new AppState(
@@ -41,6 +44,7 @@ class AppState {
       theme: theme ?? this.theme,
       queries: queries ?? this.queries,
       firebaseUser: firebaseUser ?? this.firebaseUser,
+      googleUser: googleUser ?? this.googleUser,
       region: region ?? this.region,
     );
   }
@@ -54,6 +58,7 @@ class AppState {
         theme: new BlackRedTheme(),
         queries: Query.getDefault(),
         firebaseUser: null,
+        googleUser: null,
         region: Regions.NORTH_AMERICA,
     );
   }
