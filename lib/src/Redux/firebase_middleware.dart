@@ -289,7 +289,7 @@ _endSessionActionReducer(Store<AppState> store, action) {
       .document(store.state.firebaseUser.uid)
       .getCollection(FirebaseSessionsKey)
       .document(store.state.currentActiveSession.dateStarted.toString())
-      .updateData(newSession.toMap());
+      .setData(newSession.toMap());
 
   store.dispatch(new EndSessionCompleteAction(action.dateEnded));
 }
